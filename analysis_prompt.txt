@@ -1,0 +1,334 @@
+I am uploading a Jupyter Notebook containing a completed Retail Data Analytics project.
+
+IMPORTANT
+
+Do NOT convert the notebook into an interactive report, documentation page, or educational page.
+
+Use the notebook ONLY as the source of actual data, analysis, results, business findings, and insights to build a PROFESSIONAL EXECUTIVE RETAIL DASHBOARD for senior management.
+
+The management user should NOT see
+
+- Data loading
+- Data inspection
+- Data cleaning
+- Python code
+- Technical explanations
+- Notebook workflow
+- Analysis methodology
+- Step by step coding
+
+All of this should remain hidden.
+
+Create ONE self contained, interactive HTML dashboard that can be opened directly in a browser.
+
+DASHBOARD PURPOSE
+
+The dashboard should answer one simple question
+
+After analyzing this retail data, what does management need to know
+
+Use ONLY the actual data, results, and insights available in the notebook.
+
+Do NOT invent any numbers, KPIs, findings, trends, or conclusions.
+
+DASHBOARD STRUCTURE
+
+1. HEADER
+
+Create a clean executive header with
+
+- Retail Analytics title
+- Reporting period, if available in the notebook
+- A short and simple executive description
+
+Example style
+
+Executive view of sales, profit, products, stores and inventory performance.
+
+Keep the language simple and professional.
+
+2. KPI CARDS
+
+Extract the most important overall KPIs from the notebook.
+
+Use only metrics that are actually supported by the data.
+
+Possible examples include
+
+- Total Sales
+- Total Profit
+- Total Quantity Sold
+- Average Sales
+- Average Profit
+- Number of Stores
+- Number of Products or SKUs
+- Number of Customers
+- Other important retail KPIs available in the notebook
+
+Do NOT create a KPI just because it sounds useful.
+
+Only use KPIs that can be calculated from the actual notebook data.
+
+3. EXECUTIVE SUMMARY
+
+Create 4 to 6 short management level insights.
+
+Each insight should answer
+
+What does management need to know
+
+Use simple English.
+
+Examples of the writing style
+
+Electronics generated the highest sales among the categories.
+
+Some products have high sales but low stock.
+
+Profit varies across stores and cities.
+
+Do NOT use examples unless they are actually supported by the notebook.
+
+Keep each insight short and easy to understand.
+
+4. KEY BUSINESS INSIGHTS
+
+Use the 5 main business questions and their results from the notebook.
+
+IMPORTANT
+
+Do NOT display them as notebook style question cards.
+
+Instead, convert the results into professional management insights.
+
+For each business question
+
+- Show the most useful chart
+- Show important numbers where useful
+- Add a short finding
+- Add a simple business meaning
+
+For example
+
+Finding
+Electronics generated the highest total sales.
+
+Business meaning
+This category is an important contributor to overall revenue.
+
+Use the actual results from the notebook.
+
+Do not create new conclusions that are not supported by the analysis.
+
+Use suitable charts such as
+
+- Bar charts
+- Line charts
+- Pie or donut charts
+- Comparison charts
+- Ranking charts
+
+Choose the chart based on the actual analysis.
+
+5. AD HOC INSIGHTS
+
+Use the 3 ad hoc analyses from the notebook.
+
+Present them as additional management insights.
+
+Do NOT present them as technical analysis questions.
+
+For each ad hoc insight
+
+- Show the relevant result
+- Use a suitable chart or KPI
+- Add a short finding
+- Add a simple business implication
+
+Keep the language easy to understand.
+
+6. PRODUCT AND SALES VIEW
+
+If supported by the notebook, include a dedicated section for product or SKU performance.
+
+Show useful information such as
+
+- Top performing products
+- Sales by product
+- Profit by product
+- Quantity sold
+- Products with high sales and low stock
+
+Only include metrics that actually exist in the notebook.
+
+Do not add this section if the notebook does not contain relevant analysis.
+
+7. STORE AND LOCATION VIEW
+
+If supported by the notebook, show retail performance by
+
+- Store
+- City
+- Store type
+- Region or location
+
+Use charts that make comparison easy.
+
+Focus on
+
+- Sales
+- Profit
+- Quantity
+- Other actual retail metrics from the notebook
+
+Do not invent regional or store insights.
+
+8. INVENTORY VIEW
+
+If the notebook contains inventory analysis, include a simple inventory section.
+
+Show management relevant findings such as
+
+- High sales and low stock products
+- Stock levels
+- Products requiring attention
+- Inventory related findings from the ad hoc analysis
+
+Use only the actual inventory analysis from the notebook.
+
+Do not create an inventory section if the notebook does not contain inventory data.
+
+9. MANAGEMENT TAKEAWAYS
+
+Create a final section called
+
+Management Takeaways
+
+Keep it short.
+
+Summarize the most important findings in simple English.
+
+Focus on
+
+- What is happening
+- Why does it matter
+- What should management pay attention to
+
+Use 4 to 6 concise points.
+
+Do not give recommendations that are not supported by the analysis.
+
+INTERACTIVITY
+
+Make the dashboard interactive.
+
+Include useful filters based ONLY on columns that actually exist in the notebook.
+
+Possible filters include
+
+- Store
+- City
+- Category
+- Subcategory
+- Product  SKU
+- Channel
+- Customer
+- Date
+- Year
+- Store Type
+
+Only include filters if those columns actually exist.
+
+The dashboard should support
+
+- Interactive charts
+- Hover tooltips
+- Dynamic KPI updates
+- Dynamic charts based on filters
+- Reset Filters button
+
+Do NOT create filters for columns that do not exist.
+
+IMPORTANT RETAIL DATA STRUCTURE
+
+The notebook may contain multiple retail datasets or files.
+
+Understand the actual structure and relationships from the notebook.
+
+If inventory data is present separately, keep the inventory analysis logically separate from sales transaction data unless the notebook already combines them.
+
+Do not create incorrect joins or duplicate values.
+
+DESIGN
+
+Make the dashboard look like a modern professional retail BI dashboard similar to what an executive would see in Power BI or Tableau.
+
+Use
+
+- Clean dashboard layout
+- KPI cards
+- Interactive charts
+- Clear section headings
+- Minimal text
+- Simple English
+- Clear hierarchy
+- Plenty of whitespace
+- Professional retailbusiness visual design
+- Consistent typography
+- Responsive layout
+
+Avoid excessive colors and unnecessary visual elements.
+
+The dashboard should look professional, clean and easy to understand.
+
+LANGUAGE
+
+Use simple and easy English throughout the dashboard.
+
+Avoid
+
+- Complex business terminology
+- Long paragraphs
+- Technical language
+- Python terminology
+- Statistical explanations
+- Data science explanations
+
+Management should be able to understand the dashboard without knowing Python or Data Analytics.
+
+IMPORTANT
+
+The dashboard is NOT an educational page.
+
+Do NOT include
+
+- Data Loading section
+- Data Inspection section
+- Data Cleaning section
+- Python code
+- Notebook workflow
+- Analysis methodology
+- Technical explanations
+- Code copy buttons
+- How to use this report
+- Notebook sections
+- Long descriptions
+- Step by step explanations
+
+The dashboard should contain ONLY the final business information that management needs.
+
+FINAL REQUIREMENT
+
+Create the final result as ONE self contained HTML file.
+
+It must work directly in a browser without requiring the Jupyter Notebook or Python environment.
+
+Use the actual data, results and insights from the uploaded Retail Analytics notebook.
+
+Do not invent data.
+
+Do not invent business findings.
+
+Do not change the meaning of the analysis.
+
+The final dashboard should feel like a real executive retail dashboard, not a notebook converted into a webpage.

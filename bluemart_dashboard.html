@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BlueMart Retail Analytics</title>
+<style>
+:root{--ink:#152238;--mut:#5d6b82;--line:#dfe4ec;--bg:#f4f6fa;--blue:#1d4ed8;--amber:#d99a1e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+.w{max-width:1180px;margin:0 auto;padding:0 24px}
+header{background:#fff;border-bottom:1px solid var(--line)}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;padding:28px 0 20px}
+h1{margin:0;font-size:28px;font-weight:650;letter-spacing:-.01em}
+.sub{color:var(--mut);margin:4px 0 0}.per{color:var(--mut);font-size:14px;text-align:right}
+.bar{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line)}
+.bar .w{display:flex;gap:12px;align-items:center;padding:10px 24px;flex-wrap:wrap}
+.bar label{color:var(--mut);font-size:14px}
+select,button{font:inherit;font-size:14px;padding:6px 12px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink)}
+button{cursor:pointer}button:hover,button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+section{padding:30px 0 2px}
+h2{font-size:20px;margin:0 0 14px;font-weight:650}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px}
+.k,.p,.s li{background:#fff;border:1px solid var(--line);border-radius:8px}
+.k{padding:14px 16px}.k span{color:var(--mut);font-size:13px}
+.k b{display:block;font-size:26px;font-weight:650;line-height:1.25;margin-top:2px}
+.k i{font-style:normal;color:var(--mut);font-size:12px}
+.s{margin:0;padding:0;list-style:none;display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr))}
+.s li{border-left:4px solid var(--blue);padding:12px 16px}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(440px,100%),1fr));gap:16px}
+.p{padding:18px 20px}.p h3{margin:0 0 2px;font-size:16px}
+.cap{color:var(--mut);font-size:13px;margin:0 0 10px}
+.f{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);font-size:14px}
+.f p{margin:0 0 4px}.f strong{font-weight:650}
+.big{font-size:44px;font-weight:650;line-height:1.1;margin:6px 0}
+.tools{display:flex;gap:6px;margin-bottom:10px}
+svg{width:100%;height:auto;display:block}
+[data-t]{transition:opacity .1s}[data-t]:hover{opacity:.75}
+.dn{display:flex;gap:22px;align-items:center;flex-wrap:wrap}.dn svg{width:190px;flex:none}
+.lg{list-style:none;margin:0;padding:0;font-size:14px}.lg li{display:flex;gap:8px;align-items:center;margin:4px 0}
+.lg u{width:11px;height:11px;border-radius:2px;display:inline-block}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+#tip{position:fixed;pointer-events:none;background:var(--ink);color:#fff;padding:6px 10px;border-radius:6px;font-size:13px;opacity:0;z-index:9;max-width:260px}
+footer{padding:28px 0 40px;color:var(--mut);font-size:13px}
+</style></head><body>
+<header><div class="w"><div class="top"><div>
+<h1>BlueMart Retail Analytics</h1>
+<p class="sub">Executive view of sales, profit, products, stores and inventory performance.</p></div>
+<div class="per">Sales period: Jan 2021 to Oct 2025<br>Inventory as of 31 Oct 2025</div></div></div></header>
+<div class="bar"><div class="w"><label for="cat">Category</label><select id="cat"></select>
+<button id="reset" type="button">Reset filters</button><span class="cap" id="fnote" style="margin:0"></span></div></div>
+<main class="w">
+<section><div class="kpis" id="kpis"></div></section>
+<section><h2>Executive Summary</h2><ul class="s" id="sum"></ul></section>
+<section><h2>Key Business Insights</h2><div class="g" id="key"></div></section>
+<section><h2>Additional Insights</h2><div class="g" id="adh"></div></section>
+<section><h2>Product and Sales View</h2><div class="p"><div class="tools" role="group" aria-label="Measure">
+<button id="mS" class="on" type="button">Sales</button><button id="mP" type="button">Profit</button></div>
+<h3 id="pvT"></h3><p class="cap">Sales and profit by product group. Hover a bar for details.</p><div id="pv"></div></div></section>
+<section><h2>Store and Location View</h2><div class="g" id="loc"></div></section>
+<section><h2>Inventory View</h2><div class="p"><div class="tiles" id="inv"></div><div class="dn" id="invd"></div></div></section>
+<section><h2>Management Takeaways</h2><ul class="s" id="tk"></ul></section>
+
+</main><div id="tip"></div>
+<script>
+const CAT={"Electronics":[40790950.89,11848265.14],"Household":[8190735.92,2360418.07],"Personal Care":[8181799.29,2115959.34],"Grocery":[5564702.41,1661022.56],"Snacks":[4321275.25,1299444.11],"Dairy":[4238161.64,1237884.73],"Beverages":[1922157.59,574416.61]};
+const SUB=[["Electronics","Batteries",12530863.56,3961439.04],["Snacks","Biscuits",636011.37,209890.38],["Dairy","Butter",954361.81,287480.30],["Electronics","Cables",11490862.59,3393750.71],["Grocery","Canned Goods",1375868.80,449469.99],["Grocery","Cereals",1020125.51,333211.84],["Electronics","Chargers",9227916.96,2311019.26],["Dairy","Cheese",1121218.96,357501.15],["Snacks","Chips",792557.50,276988.62],["Snacks","Chocolates",1220195.19,334523.25],["Household","Cleaning Supplies",3138214.56,898445.37],["Beverages","Coffee",164538.77,32076.72],["Snacks","Crackers",1099041.94,346320.23],["Dairy","Cream",673628.58,142565.98],["Personal Care","Deodorant",675071.16,244899.10],["Household","Detergent",1330233.96,427244.32],["Beverages","Juices",476852.95,137047.54],["Dairy","Milk",827982.92,237281.93],["Electronics","Mobile Accessories",7541307.78,2182056.13],["Snacks","Nuts",573469.25,131721.63],["Household","Paper Products",2745043.37,743314.52],["Grocery","Pasta",692138.15,234355.73],["Grocery","Rice",1355929.08,344998.07],["Personal Care","Shampoo",1763986.54,399758.31],["Personal Care","Skincare",2424275.35,551642.10],["Personal Care","Soap",914969.10,264067.15],["Beverages","Soft Drinks",649974.97,227237.47],["Grocery","Spices",1120640.87,298986.93],["Beverages","Tea",422597.93,136702.61],["Personal Care","Toothpaste",2403497.14,655592.68],["Household","Trash Bags",977244.03,291413.86],["Beverages","Water",208192.97,41352.27],["Dairy","Yogurt",660969.37,213055.37]];
+const CH=[["Store",30227603.54],["Website",20299836.60],["MobileApp",13097435.70],["Amazon.ae",6470717.92],["Noon",3114189.23]];
+const ST=[[41,1500094.91],[11,1495245.74],[49,1494703.15],[44,1493356.50],[4,1492536.75],[37,1489346.54],[35,1486546.13],[8,1486405.93],[17,1484028.19],[19,1481028.59],[50,1480931.59],[7,1480485.94],[32,1478497.21],[18,1478013.76],[24,1476225.64],[5,1474311.27],[29,1474267.22],[15,1474126.03],[14,1473344.19],[48,1471703.45],[31,1471566.83],[40,1468170.08],[6,1467798.01],[16,1466637.19],[33,1466356.55],[21,1464482.02],[13,1464313.78],[26,1462975.24],[46,1462534.78],[45,1461358.23],[10,1461160.16],[22,1458688.43],[25,1456285.53],[43,1455921.49],[38,1453881.91],[28,1453459.38],[30,1452759.04],[47,1449578.40],[20,1448731.12],[23,1446113.16],[34,1444785.92],[9,1443576.88],[1,1439728.89],[36,1437089.00],[39,1436590.50],[2,1434787.69],[42,1431007.22],[27,1430905.27],[12,1428317.58],[3,1425023.98]];
+const MON=[1980000,1990000,840000,1210000,1710000,1110000,1590000,1530000,750000,750000,880000,1010000,1970000,1670000,750000,1500000,1270000,1050000,1550000,1600000,770000,830000,810000,1150000,2010000,1660000,1000000,1390000,1110000,1130000,1400000,1450000,730000,800000,800000,1100000,2190000,1820000,1340000,1200000,1130000,1180000,1570000,1550000,760000,800000,810000,1020000,2020000,1740000,1580000,750000,1140000,1220000,1520000,1570000,760000,770000];
+const CITY=[["Dubai",41.1e6],["Abu Dhabi",20.6e6],["Sharjah",11.7e6]];
+const LOW=[["Cream 1015","Dairy",216990.20,53024.38],["Canned Goods 1029","Grocery",221385.97,53295.53],["Pasta 1196","Grocery",240533.99,56561.85],["Rice 1121","Grocery",252178.55,36236.60],["Spices 1128","Grocery",210567.09,53687.09],["Cleaning Supplies 1179","Household",225473.13,59049.43],["Paper Products 1028","Household",321556.41,58348.01],["Soap 1156","Personal Care",279936.17,53765.73]];
+const INV={rec:8735,risk:2098,below:0,stores:50,snap:"31 Oct 2025"},TXN=641843-45,SKUS=200,MN="Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split(" ");
+const $=s=>document.querySelector(s),sum=a=>a.reduce((x,y)=>x+y,0);
+const M=n=>n>=1e6?(n/1e6).toFixed(n>=1e7?1:2)+"M":n>=1e3?Math.round(n/1e3)+"K":Math.round(n)+"";
+const N=n=>Math.round(n).toLocaleString("en-US"),P=(a,b)=>(a/b*100).toFixed(1)+"%";
+const totS=sum(Object.values(CAT).map(v=>v[0])),totP=sum(Object.values(CAT).map(v=>v[1])),mar=totP/totS;
+const FP=(f,m)=>`<p><strong>Finding</strong> ${f}</p><p><strong>Business meaning</strong> ${m}</p>`;
+const panel=(id,t,c)=>`<div class="p"><h3>${t}</h3><p class="cap">${c}</p><div id="${id}"></div><div class="f" id="${id}F"></div></div>`;
+const tip=$("#tip");
+document.addEventListener("mousemove",e=>{const t=e.target.closest("[data-t]");if(!t){tip.style.opacity=0;return}tip.innerHTML=t.dataset.t;tip.style.opacity=1;tip.style.left=Math.min(e.clientX+14,innerWidth-tip.offsetWidth-8)+"px";tip.style.top=(e.clientY+16)+"px"});
+document.addEventListener("scroll",()=>tip.style.opacity=0);
+function hbar(id,rows,o={}){const c=o.c||["#1d4ed8","#d99a1e"],n=rows[0].v.length,bh=n>1?12:17,rh=n*bh+9,L=o.L||130,W=640,R=54,H=rows.length*rh+10,mx=Math.max(...rows.flatMap(r=>r.v),o.ref||0)*1.04;
+let s=`<svg viewBox="0 0 ${W} ${H}" role="img">`;
+rows.forEach((r,i)=>{const y=i*rh+5;s+=`<text x="${L-8}" y="${y+(n*bh)/2+1}" text-anchor="end" dominant-baseline="middle" font-size="12" fill="#5d6b82">${r.l}</text>`;
+r.v.forEach((v,j)=>{const w=Math.max(1,v/mx*(W-L-R));s+=`<rect data-t="${r.t[j]}" x="${L}" y="${y+j*bh}" width="${w}" height="${bh-2}" rx="2" fill="${c[j]}" opacity="${r.o||1}"/><text x="${L+w+5}" y="${y+j*bh+(bh-2)/2+1}" dominant-baseline="middle" font-size="11" fill="#152238">${o.f?o.f(v):M(v)}</text>`})});
+if(o.ref){const x=L+o.ref/mx*(W-L-R);s+=`<line x1="${x}" x2="${x}" y1="0" y2="${H}" stroke="#c2412d" stroke-dasharray="4 3"/><text x="${x+4}" y="${H-1}" font-size="11" fill="#c2412d">${o.rl}</text>`}
+$("#"+id).innerHTML=s+"</svg>"}
+function vbar(id,rows){const W=640,H=230,l=44,b=8,t=10,mx=1.6e6,w=(W-l-8)/rows.length;let s=`<svg viewBox="0 0 ${W} ${H}" role="img">`;
+for(let g=0;g<=1.6e6;g+=.4e6)s+=`<line x1="${l}" x2="${W-8}" y1="${t+(1-g/mx)*(H-t-b)}" y2="${t+(1-g/mx)*(H-t-b)}" stroke="#e6eaf1"/><text x="${l-6}" y="${t+(1-g/mx)*(H-t-b)+4}" text-anchor="end" font-size="11" fill="#5d6b82">${g/1e6}M</text>`;
+rows.forEach((r,i)=>{const h=r.v/mx*(H-t-b);s+=`<rect data-t="${r.t}" x="${l+i*w+1}" y="${H-b-h}" width="${w-2}" height="${h}" rx="1.5" fill="${r.c}"/>`});$("#"+id).innerHTML=s+"</svg>"}
+function line(id,v){const W=640,H=250,l=44,r=10,t=10,b=28,mx=2.4e6,x=i=>l+i*(W-l-r)/(v.length-1),y=a=>t+(1-a/mx)*(H-t-b);let s=`<svg viewBox="0 0 ${W} ${H}" role="img">`;
+for(let g=0;g<=mx;g+=.6e6)s+=`<line x1="${l}" x2="${W-r}" y1="${y(g)}" y2="${y(g)}" stroke="#e6eaf1"/><text x="${l-6}" y="${y(g)+4}" text-anchor="end" font-size="11" fill="#5d6b82">${g/1e6}M</text>`;
+const pts=v.map((a,i)=>x(i)+","+y(a)).join(" ");s+=`<polygon points="${x(0)},${y(0)} ${pts} ${x(v.length-1)},${y(0)}" fill="#1d4ed8" opacity=".08"/><polyline points="${pts}" fill="none" stroke="#1d4ed8" stroke-width="2"/>`;
+v.forEach((a,i)=>{s+=`<circle cx="${x(i)}" cy="${y(a)}" r="2.6" fill="#1d4ed8"/><circle data-t="${MN[i%12]} ${2021+Math.floor(i/12)}<br>Sales ≈ ${M(a)}" cx="${x(i)}" cy="${y(a)}" r="8" fill="transparent"/>`;if(i%12==0)s+=`<text x="${x(i)}" y="${H-8}" text-anchor="middle" font-size="11" fill="#5d6b82">${2021+i/12}</text>`});
+$("#"+id).innerHTML=s+"</svg>"}
+function donut(id,items,cols,ctr,fm){const R=70,C=2*Math.PI*R,tot=sum(items.map(i=>i[1]));let o=0,s=`<svg viewBox="0 0 180 180" role="img">`;
+items.forEach((it,i)=>{const L=it[1]/tot*C;s+=`<circle data-t="${it[0]}<br>${fm(it[1])} (${P(it[1],tot)})" cx="90" cy="90" r="${R}" fill="none" stroke="${cols[i]}" stroke-width="26" stroke-dasharray="${L} ${C-L}" stroke-dashoffset="${-o}" transform="rotate(-90 90 90)"/>`;o+=L});
+s+=`<text x="90" y="89" text-anchor="middle" font-size="21" font-weight="650" fill="#152238">${ctr[0]}</text><text x="90" y="107" text-anchor="middle" font-size="11" fill="#5d6b82">${ctr[1]}</text></svg>`;
+return s+`<ul class="lg">`+items.map((it,i)=>`<li><u style="background:${cols[i]}"></u>${it[0]} <b>${fm(it[1])}</b> <span class="cap" style="margin:0">${P(it[1],tot)}</span></li>`).join("")+"</ul>"}
+let cat="All",met=1;
+const sel=$("#cat");sel.innerHTML=["All",...Object.keys(CAT)].map(c=>`<option>${c}</option>`).join("");
+sel.onchange=()=>{cat=sel.value;draw()};
+$("#reset").onclick=()=>{cat="All";met=1;sel.value="All";$("#mS").className="on";$("#mP").className="";draw()};
+$("#mS").onclick=()=>{met=1;$("#mS").className="on";$("#mP").className="";draw()};
+$("#mP").onclick=()=>{met=2;$("#mP").className="on";$("#mS").className="";draw()};
+const mg=c=>CAT[c][1]/CAT[c][0],cs=Object.keys(CAT),byM=[...cs].sort((a,b)=>mg(a)-mg(b)),elec=CAT.Electronics;
+const stS=ST.map(s=>s[1]),stAvg=sum(stS)/50,chOther=totS-CH[0][1];
+function static_(){
+$("#sum").innerHTML=[`Total sales were ${M(totS)} with a profit of ${M(totP)}, a profit margin of ${(mar*100).toFixed(1)}%, across ${INV.stores} stores.`,
+`Electronics generated the highest sales (${P(elec[0],totS)} of the total) and the highest profit (${P(elec[1],totP)}).`,
+`Batteries, Cables, Chargers and Mobile Accessories are the four most profitable product groups.`,
+`Every store sold between ${M(Math.min(...stS))} and ${M(Math.max(...stS))}, so sales are spread evenly across stores. Dubai brings in about ${P(CITY[0][1],totS)} of sales.`,
+`Stores are the largest channel (${P(CH[0][1],totS)}). Website, MobileApp, Amazon.ae and Noon together bring in ${P(chOther,totS)}.`,
+`${N(INV.risk)} store and product combinations (${P(INV.risk,INV.rec)}) have high sales but low stock. None are below their reorder point.`].map(t=>`<li>${t}</li>`).join("");
+$("#key").innerHTML=panel("c1","How are sales changing over time?","Monthly sales. Values are approximate.")+panel("c2","Which categories generate the highest sales and profit?","Sales and profit by category")+panel("c3","Which products are the most profitable?","Top 10 product groups by profit")+panel("c4","Which cities perform best?","Sales by city. Values are approximate.")+panel("c5","Which sales channel contributes the most revenue?","Share of total sales by channel");
+const mx=Math.max(...MON),mn=Math.min(...MON);
+line("c1",MON);$("#c1F").innerHTML=FP(`Monthly sales range from about ${M(mn)} (Sep 2023) to ${M(mx)} (Jan 2024). January or February is the strongest month each year, and September and October are low every year.`,`Sales are uneven through the year, so planning should follow these peaks and dips.`);
+$("#c4F").innerHTML=FP(`Dubai leads with about ${M(CITY[0][1])}, then Abu Dhabi (about ${M(CITY[1][1])}) and Sharjah (about ${M(CITY[2][1])}).`,`More than half of sales come from Dubai.`);
+hbar("c4",CITY.map(c=>({l:c[0],v:[c[1]],t:[`${c[0]}<br>Sales ≈ ${M(c[1])} (${P(c[1],totS)})`]})),{L:90});
+const cols=["#1d4ed8","#4f7be6","#8fb0f2","#c6d6f8","#d99a1e"];
+$("#c5").innerHTML=`<div class="dn">`+donut("x",CH,cols,[M(totS),"total sales"],M)+`</div>`;
+$("#c5F").innerHTML=FP(`${CH[0][0]} is the largest channel at ${M(CH[0][1])}. ${CH[4][0]} is the smallest at ${M(CH[4][1])}.`,`Stores still lead, but the other four channels together bring in more than half of sales.`);
+$("#adh").innerHTML=`<div class="p"><h3>Products at risk of running out</h3><p class="cap">High sales and low stock (above-median units sold, below-median stock)</p><div class="big">${N(INV.risk)}</div><span class="cap">of ${N(INV.rec)} store and product stock records (${P(INV.risk,INV.rec)})</span><div class="f">${FP("About one in four stock records combines strong sales with low stock.","These are the items most likely to run out first.")}</div></div>`+
+`<div class="p"><h3>Products below reorder point</h3><p class="cap">Stock check on ${INV.snap}</p><div class="big">${INV.below}</div><span class="cap">of ${N(INV.rec)} stock records are below their reorder point</span><div class="f">${FP("No product is below its reorder point.","There are no urgent reorder alerts at this date.")}</div></div>`+panel("a3","Products with high sales but low profit","Profit margin of 8 high-sales products compared with the company average");
+const lw=LOW.map(r=>({l:r[0],v:[r[3]/r[2]*100],t:[`${r[0]} (${r[1]})<br>Sales ${M(r[2])}<br>Profit ${M(r[3])}<br>Margin ${P(r[3],r[2])}`]})).sort((a,b)=>a.v[0]-b.v[0]);
+hbar("a3",lw,{L:130,ref:mar*100,rl:"Average "+(mar*100).toFixed(1)+"%",f:v=>v.toFixed(1)+"%"});
+$("#a3F").innerHTML=FP(`These 8 products sell well but earn a lower margin than the company average. ${lw[0].l} is the lowest at ${lw[0].v[0].toFixed(1)}%.`,`They are worth a closer look.`);
+const top5=ST.slice(0,5).map(s=>s[0]),bot5=ST.slice(-5).map(s=>s[0]);
+$("#loc").innerHTML=panel("l1","Sales by store","All 50 stores, highest to lowest. Top 5 in blue, bottom 5 in amber.")+panel("l2","City comparison","Sales by city. Values are approximate.");
+vbar("l1",ST.map((s,i)=>({v:s[1],c:i<5?"#1d4ed8":i>=45?"#d99a1e":"#a9bde8",t:`BlueMart Store ${String(s[0]).padStart(2,"0")}<br>Sales ${M(s[1])}<br>Rank ${i+1} of 50`})));
+$("#l1F").innerHTML=FP(`Store 41 is highest at ${M(ST[0][1])} and Store 03 is lowest at ${M(ST[49][1])}. The average store sold ${M(stAvg)}.`,`Store sales are close together, so no store stands far above or below the rest.`);
+hbar("l2",CITY.map(c=>({l:c[0],v:[c[1]],t:[`${c[0]}<br>Sales ≈ ${M(c[1])} (${P(c[1],totS)})`]})),{L:90});
+$("#l2F").innerHTML=FP(`Dubai is about ${(CITY[0][1]/CITY[2][1]).toFixed(1)} times the size of Sharjah in sales.`,`City sales differ much more than store sales do.`);
+$("#inv").innerHTML=[["Stock records",N(INV.rec),"store and product pairs"],["Snapshot date",INV.snap,"latest stock check"],["High sales, low stock",N(INV.risk),P(INV.risk,INV.rec)+" of records"],["Below reorder point",INV.below,"none need reordering now"]].map(k=>`<div class="k"><span>${k[0]}</span><b>${k[1]}</b><i>${k[2]}</i></div>`).join("");
+$("#invd").innerHTML=donut("y",[["High sales, low stock",INV.risk],["Other stock records",INV.rec-INV.risk]],["#d99a1e","#a9bde8"],[P(INV.risk,INV.rec),"at risk"],N)+`<div style="flex:1;min-width:240px"><div class="f" style="border:0;margin:0;padding:0">${FP("About 24% of stock records combine high sales with low stock. No record is below its reorder point.","Watch these items closely so best sellers do not run out.")}</div></div>`;
+$("#tk").innerHTML=[`Electronics drives the business: ${P(elec[0],totS)} of sales and ${P(elec[1],totP)} of profit. Results depend heavily on this category.`,
+`Margin is steady at ${(mar*100).toFixed(1)}%. ${byM[0]} is the lowest at ${(mg(byM[0])*100).toFixed(1)}% and ${byM[6]} the highest at ${(mg(byM[6])*100).toFixed(1)}%.`,
+`Sales rise early in the year and dip in September and October. Plan for this pattern.`,
+`Stores perform evenly. City and channel are where sales differ most: Dubai is about ${P(CITY[0][1],totS)} of sales, and Stores are ${P(CH[0][1],totS)}.`,
+`${P(INV.risk,INV.rec)} of stock records show high sales with low stock. Keep these in view to avoid empty shelves.`,
+`Eight products sell well but earn below-average margin. ${lw[0].l} needs the closest look.`].map(t=>`<li>${t}</li>`).join("")}
+function draw(){
+const f=cat!="All",rows=f?[cat]:cs,S=sum(rows.map(c=>CAT[c][0])),Pf=sum(rows.map(c=>CAT[c][1]));
+const K=[["Total sales",M(S),f?"in "+cat:"Jan 2021 to Oct 2025"],["Total profit",M(Pf),"after product cost"],["Profit margin",P(Pf,S),"profit / sales"]];
+if(f)K.push(["Share of total sales",P(S,totS),"of all categories"]);
+else K.push(["Transactions",N(TXN),"sales lines"],["Average sale",N(totS/TXN),"per transaction"],["Average profit",N(totP/TXN),"per transaction"],["Stores",INV.stores,"3 cities"],["Products (SKUs)",SKUS,"7 categories"]);
+$("#kpis").innerHTML=K.map(k=>`<div class="k"><span>${k[0]}</span><b>${k[1]}</b><i>${k[2]}</i></div>`).join("");
+$("#fnote").textContent=f?"Category view applies to the KPIs and the category and product charts.":"";
+hbar("c2",cs.map(c=>({l:c,v:CAT[c],o:f&&c!=cat?.3:1,t:[`${c}<br>Sales ${M(CAT[c][0])}`,`${c}<br>Profit ${M(CAT[c][1])} (margin ${P(CAT[c][1],CAT[c][0])})`]})),{L:100});
+$("#c2F").innerHTML=FP(`${cs[0]} leads in both sales (${M(elec[0])}) and profit (${M(elec[1])}). Margins range from ${(mg(byM[0])*100).toFixed(1)}% (${byM[0]}) to ${(mg(byM[6])*100).toFixed(1)}% (${byM[6]}).`,`Electronics is the main contributor to revenue and profit. Other categories are far smaller.`);
+const sub=SUB.filter(s=>!f||s[0]==cat),tp=[...sub].sort((a,b)=>b[3]-a[3]).slice(0,10);
+hbar("c3",tp.map(s=>({l:s[1],v:[s[3]],t:[`${s[1]} (${s[0]})<br>Profit ${M(s[3])}<br>Sales ${M(s[2])}`]})),{L:120,c:["#1d4ed8"]});
+$("#c3F").innerHTML=FP(`${tp[0][1]} earned the most profit${f?" in "+cat:""} at ${M(tp[0][3])}, ${P(tp[0][3],Pf)} of the ${f?cat+" ":""}profit.`+(f?"":` The top four are all Electronics.`),`A few product groups carry a large share of profit.`);
+const k=met==1?2:3,pv=[...sub].sort((a,b)=>b[k]-a[k]);
+$("#pvT").textContent=(met==1?"Sales":"Profit")+" by product group"+(f?" in "+cat:"");
+hbar("pv",pv.map(s=>({l:s[1],v:[s[k]],t:[`${s[1]} (${s[0]})<br>Sales ${M(s[2])}<br>Profit ${M(s[3])} (margin ${P(s[3],s[2])})`]})),{L:130,c:[met==1?"#1d4ed8":"#d99a1e"]})}
+static_();draw();
+</script></body></html>
