@@ -54,6 +54,23 @@ bluemart-retail-analytics/
 - **Environment:** Jupyter Notebook
 - **Dashboard & AI:**  built with Claude AI
 
+## How to Use
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/<your-username>/bluemart-retail-analytics.git
+   cd bluemart-retail-analytics
+   ```
+2. Install the required libraries:
+   ```bash
+   pip install pandas numpy matplotlib jupyter
+   ```
+3. Open the notebook:
+   ```bash
+   jupyter notebook bluemart_retail_analysis.ipynb
+   ```
+4. Make sure `bm_sales.csv`, `bm_stores.csv`, `bm_skus.csv` and `bm_inventory.csv` are in the same folder as the notebook, then run all cells.
+5. Open `bluemart_dashboard.html` in your browser to view the dashboard.
 
 ## Author
 Abhisht pandey
