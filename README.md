@@ -50,26 +50,10 @@ bluemart-retail-analytics/
 
 ## 🛠️ Tech Stack
 - **Data Analysis:** Python, Pandas, NumPy
-- **Visualization:** Plotly, Matplotlib *(keep only the ones you used)*
+- **Visualization:** Plotly, Matplotlib 
 - **Environment:** Jupyter Notebook
 - **Dashboard & AI:**  built with Claude AI
 
-## How to Run
-
-1. Clone the repository
-   ```bash
-   git clone https://github.com/<your-username>/bluemart-retail-analytics.git
-   cd bluemart-retail-analytics
-   ```
-2. Install dependencies
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Open the notebook
-   ```bash
-   jupyter notebook notebooks/bluemart_retail_analysis.ipynb
-   ```
-4. Open `dashboard/bluemart_dashboard.html` in your browser to view the dashboard.
 
 ## Author
 Abhisht pandey
