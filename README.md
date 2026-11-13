@@ -10,11 +10,11 @@ An end-to-end retail analytics project that analyzes sales, profit, products, st
 
 ## Dashboard Preview
 
-![Dashboard Overview](images/dashboard_overview.png)
+![Dashboard Overview](dashboard_overview.png)
 
-![Key Insights](images/dashboard_insights_1.png)
+![Key Insights](dashboard_insights_1.png)
 
-![More Insights](images/dashboard_insights_2.png)
+![More Insights](dashboard_insights_2.png)
 
 ## Key Metrics
 
