@@ -50,7 +50,7 @@ bluemart-retail-analytics/
 
 ## 🛠️ Tech Stack
 - **Data Analysis:** Python, Pandas, NumPy
-- **Visualization:** Plotly, Matplotlib 
+- **Visualization:** Matplotlib 
 - **Environment:** Jupyter Notebook
 - **Dashboard & AI:**  built with Claude AI
 
